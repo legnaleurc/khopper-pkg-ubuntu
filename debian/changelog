@@ -1,0 +1,57 @@
+khopper (0.2.1-0ubuntu1) jaunty; urgency=low
+
+  * New upstream release
+
+ -- Wei-Cheng Pan <legnaleurc@gmail.com>  Thu, 04 Jun 2009 02:05:18 +0800
+
+khopper (0.2.0-1ubuntu2) jaunty; urgency=low
+
+  * Fix dependency problem
+
+ -- Wei-Cheng Pan <legnaleurc@gmail.com>  Wed, 20 May 2009 18:47:45 +0800
+
+khopper (0.2.0-1ubuntu1) jaunty; urgency=low
+
+  * Fork for ubuntu
+
+ -- Wei-Cheng Pan <legnaleurc@gmail.com>  Wed, 20 May 2009 16:50:57 +0800
+
+khopper (0.2.0-1) unstable; urgency=low
+
+  * New Upstream Version
+  * Add khopper-plugins to recommends
+
+ -- Wei-Cheng Pan <legnaleurc@gmail.com>  Wed, 20 May 2009 05:53:36 +0000
+
+khopper (0.1.80-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Wei-Cheng Pan <legnaleurc@gmail.com>  Wed, 22 Apr 2009 17:06:37 +0000
+
+khopper (0.1.1-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Wei-Cheng Pan <legnaleurc@gmail.com>  Mon, 23 Feb 2009 21:51:33 +0800
+
+khopper (0.1.0-1) unstable; urgency=low
+
+  * New upstream release
+  * Remove libmp3lame-dev build dependency
+
+ -- Wei-Cheng Pan <legnaleurc@gmail.com>  Fri, 13 Feb 2009 03:41:19 +0800
+
+khopper (0.0.90-0ubuntu1) intrepid; urgency=low
+
+  * New upstream release
+  * Add menu to desktop environment
+
+ -- Wei-Cheng Pan <legnaleurc@gmail.com>  Sun, 08 Feb 2009 02:08:15 +0800
+
+khopper (0.0.80-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Wei-Cheng Pan <legnaleurc@gmail.com>  Thu, 05 Feb 2009 22:06:03 +0800
+

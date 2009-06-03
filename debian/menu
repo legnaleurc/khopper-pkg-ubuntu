@@ -1,0 +1,2 @@
+?package(khopper):needs="X11" section="Applications/Sound"\
+  title="Khopper" command="/usr/bin/khopper"

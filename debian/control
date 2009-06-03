@@ -1,0 +1,38 @@
+Source: khopper
+Section: sound
+Priority: extra
+Maintainer: Wei-Cheng Pan <legnaleurc@gmail.com>
+Build-Depends: debhelper (>= 7), libqt4-dev (>= 4.4), libphonon-dev,
+ libloki-dev, libboost-dev, libavcodec-dev (>= 0.5), libavformat-dev (>= 0.5)
+Standards-Version: 3.8.1
+Homepage: http://legnaleurc.blogspot.com/search/label/Khopper
+
+Package: khopper
+Architecture: any
+Depends: ${shlibs:Depends}, libkhopper-core (>= 0.2.1)
+Recommends: khopper-plugins (>= 0.2.1)
+Conflicts: khopper (<< 0.2.1), libkhopper-core (<< 0.2.1),
+ khopper-plugins (<< 0.2.1)
+Description: Audio converter which can handel CUE sheets
+ Khopper is an audio converter, which can parse CUE sheets, and output to
+ other audio formats. The supported formats are depends on FFmpeg.
+
+Package: libkhopper-core
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}
+Conflicts: khopper (<< 0.2.1), libkhopper-core (<< 0.2.1),
+ khopper-plugins (<< 0.2.1)
+Description: Core library of Khopper
+ This package contains the core feature of Khopper.
+
+Package: khopper-plugins
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, libkhopper-core (>= 0.2.1)
+Conflicts: khopper (<< 0.2.1), libkhopper-core (<< 0.2.1),
+ khopper-plugins (<< 0.2.1)
+Recommends: khopper (>= 0.2.1)
+Description: Plugins for Khopper
+ This package contains plugins of Khopper, which extends output formats and
+ supported codec.

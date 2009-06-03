@@ -1,0 +1,10 @@
+[Desktop Entry]
+Categories=Application;AudioVideo;Qt;
+Encoding=UTF-8
+Name=Khopper
+Exec=khopper
+Icon=/usr/share/pixmaps/khopper.svg
+Type=Application
+Terminal=false
+GenericName=Khopper
+Comment=An audio converter
