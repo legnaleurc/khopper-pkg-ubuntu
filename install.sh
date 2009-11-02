@@ -1,9 +1,9 @@
 #! /bin/sh
 
-PREFIX="/usr"
-MAIN="$1/$2${PREFIX}"
-CORE="$1/$3${PREFIX}"
-PLUGINS="$1/$4${PREFIX}"
+PREFIX="usr"
+MAIN="$1/khopper/${PREFIX}"
+CORE="$1/libkhopper-core/${PREFIX}"
+PLUGINS="$1/khopper-plugins/${PREFIX}"
 
 install -m 755 ./build/release/khopper ${MAIN}/bin
 install -m 644 ./main/image/logo.svg ${MAIN}/share/pixmaps/khopper.svg

@@ -50,7 +50,7 @@ install: build
 
 	# Add here commands to install the package into debian/khopper.
 	#$(MAKE) DESTDIR=$(CURDIR)/debian/khopper install
-	sh $(CURDIR)/install.sh $(CURDIR)/debian khopper libkhopper-core khopper-plugins
+	sh $(CURDIR)/install.sh $(CURDIR)/debian
 
 
 # Build architecture-independent files here.
