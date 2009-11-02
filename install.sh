@@ -9,6 +9,6 @@ install -m 755 ./build/release/khopper ${MAIN}/bin
 install -m 644 ./main/image/logo.svg ${MAIN}/share/pixmaps/khopper.svg
 install -m 644 ./khopper.desktop ${MAIN}/share/applications
 
-install -m 644 ./build/release/libk_core.so.0.2.1 ${CORE}/lib
+install -m 644 ./build/release/libk_core.so.0.2.2 ${CORE}/lib
 
 install -m 644 ./build/release/plugins/*.so ${PLUGINS}/lib/khopper/plugins
