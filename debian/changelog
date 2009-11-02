@@ -1,3 +1,14 @@
+khopper (0.2.2-1ubuntu1) karmic; urgency=low
+
+  [ Wei-Cheng Pan ]
+  * Delete wrong files.
+  * Imported Upstream version 0.2.2
+  * Change install script.
+  * Bump dependency version.
+  * Update library settings.
+
+ -- Wei-Cheng Pan <legnaleurc@gmail.com>  Mon, 02 Nov 2009 14:20:06 +0000
+
 khopper (0.2.1-0ubuntu1) jaunty; urgency=low
 
   * New upstream release
