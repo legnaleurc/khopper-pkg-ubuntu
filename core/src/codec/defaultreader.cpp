@@ -175,66 +175,99 @@ namespace khopper {
 			stop = false;
 			// static just for speed
 			static uint8_t audio_buf[AVCODEC_MAX_AUDIO_FRAME_SIZE*3/2];
+			int ret = 0;
 
 			int dp_len, data_size;
 
 			ByteArray data;
 
-			if( av_read_frame( this->pFormatContext_.get(), this->pPacket_.get() ) >= 0 ) {
-				uint8_t * pktDataBackup = this->pPacket_->data;
-				int64_t curPts = -1;
-				int64_t decoded = 0;
-				if( this->pPacket_->pts != static_cast< int64_t >( AV_NOPTS_VALUE ) ) {
-					curPts = av_rescale(
-						this->pPacket_->pts,
-						AV_TIME_BASE * static_cast< int64_t >( this->pStream_->time_base.num ),
-						this->pStream_->time_base.den
-					);
-				}
-				while( this->pPacket_->size > 0 ) {
-					if( this->afterEnd( ::toGeneral( curPts ) ) ) {
-						stop = true;
-						break;
-					}
-					data_size = sizeof( audio_buf );
-					dp_len = avcodec_decode_audio3(
-						this->pCodecContext_.get(),
-						static_cast< int16_t * >( static_cast< void * >( audio_buf ) ),
-						&data_size,
-						this->pPacket_.get()
-					);
-					if( dp_len < 0 ) {
-						break;
-					}
-					this->pPacket_->data += dp_len;
-					this->pPacket_->size -= dp_len;
-					if( data_size <= 0 ) {
-						continue;
-					}
-					int64_t ptsDiff = (static_cast< int64_t >( AV_TIME_BASE )/2 * data_size) / (this->pCodecContext_->sample_rate * this->pCodecContext_->channels);
-					if( this->afterBegin( ::toGeneral( curPts ) ) ) {
-						data.insert( data.end(), audio_buf, audio_buf + data_size );
-						decoded += ptsDiff;
-					}
-					curPts += ptsDiff;
-				}
-				if( pktDataBackup ) {
-					this->pPacket_->data = pktDataBackup;
-					av_free_packet( this->pPacket_.get() );
-				}
-
-				duration = static_cast< double >( decoded ) / AV_TIME_BASE;
+			ret = av_read_frame( this->pFormatContext_.get(), this->pPacket_.get() );
+			if( ret < 0 ) {
+				stop = true;
+				return data;
 			}
+			int64_t curPts = -1;
+			int64_t decoded = 0;
+			if( this->pPacket_->pts != static_cast< int64_t >( AV_NOPTS_VALUE ) ) {
+				curPts = av_rescale(
+					this->pPacket_->pts,
+					AV_TIME_BASE * static_cast< int64_t >( this->pStream_->time_base.num ),
+					this->pStream_->time_base.den
+				);
+			}
+#if LIBAVCODEC_VERSION_MAJOR < 53
+			uint8_t * audio_pkt_data = this->pPacket_->data;
+			int audio_pkt_size = this->pPacket_->size;
+			while( audio_pkt_size > 0 ) {
+#else
+			uint8_t * pktDataBackup = this->pPacket_->data;
+			while( this->pPacket_->size > 0 ) {
+#endif
+				if( this->afterEnd( toGeneral( curPts ) ) ) {
+					stop = true;
+					break;
+				}
+				data_size = sizeof( audio_buf );
+#if LIBAVCODEC_VERSION_MAJOR < 53
+				dp_len = avcodec_decode_audio2(
+					this->pCodecContext_.get(),
+					static_cast< int16_t * >( static_cast< void * >( audio_buf ) ),
+					&data_size,
+					audio_pkt_data,
+					audio_pkt_size
+				);
+#else
+				dp_len = avcodec_decode_audio3(
+					this->pCodecContext_.get(),
+					static_cast< int16_t * >( static_cast< void * >( audio_buf ) ),
+					&data_size,
+					this->pPacket_.get()
+				);
+#endif
+				if( dp_len < 0 ) {
+#if LIBAVCODEC_VERSION_MAJOR < 53
+					audio_pkt_size = 0;
+#endif
+					break;
+				}
+#if LIBAVCODEC_VERSION_MAJOR < 53
+				audio_pkt_data += dp_len;
+				audio_pkt_size -= dp_len;
+#else
+				this->pPacket_->data += dp_len;
+				this->pPacket_->size -= dp_len;
+#endif
+				if( data_size <= 0 ) {
+					continue;
+				}
+				int64_t ptsDiff = (static_cast< int64_t >( AV_TIME_BASE )/2 * data_size) / (this->pCodecContext_->sample_rate * this->pCodecContext_->channels);
+				if( this->afterBegin( toGeneral( curPts ) ) ) {
+					data.insert( data.end(), audio_buf, audio_buf + data_size );
+					decoded += ptsDiff;
+				}
+				curPts += ptsDiff;
+			}
+#if LIBAVCODEC_VERSION_MAJOR < 53
+			if( this->pPacket_->data ) {
+#else
+			if( pktDataBackup ) {
+				this->pPacket_->data = pktDataBackup;
+#endif
+				av_free_packet( this->pPacket_.get() );
+			}
+
+			duration = static_cast< double >( decoded ) / AV_TIME_BASE;
 
 			return data;
 		}
 
 		bool DefaultReader::seekFrame( double timestamp ) {
-			bool succeed = av_seek_frame( this->pFormatContext_.get(), -1, ::toNative( timestamp ), AVSEEK_FLAG_BACKWARD ) >= 0;
-			if( succeed ) {
+			timestamp = av_rescale( timestamp, pStream_->time_base.den, pStream_->time_base.num );
+			int succeed = av_seek_frame( this->pFormatContext_.get(), pStream_->index, timestamp, AVSEEK_FLAG_ANY | AVSEEK_FLAG_BACKWARD );
+			if( succeed >= 0 ) {
 				avcodec_flush_buffers( this->pCodecContext_.get() );
 			}
-			return succeed;
+			return succeed >= 0;
 		}
 
 	}

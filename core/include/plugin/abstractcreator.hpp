@@ -106,7 +106,9 @@ namespace khopper {
 					try {
 						pointer = this->doCreate();
 					} catch( ... ) {
-						assert( !"memory allocation failed" );
+						// FIXME: compile error, don't know why
+						// assert( !"memory allocation failed" );
+						pointer.reset();
 					}
 					assert( pointer || !"got null pointer" );
 					return pointer;

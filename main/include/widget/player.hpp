@@ -26,7 +26,8 @@
 
 #include <QWidget>
 #include <QPushButton>
-#include <Phonon>
+#include <Phonon/MediaObject>
+#include <Phonon/VolumeSlider>
 
 namespace khopper {
 
@@ -55,7 +56,7 @@ namespace khopper {
 			 * @brief Emitted when drop an openable file
 			 * @param paths File path
 			 */
-			void dropFile( const QStringList & paths );
+			void fileDropped( const QStringList & paths );
 			/**
 			 * @brief Emmited when convert action is required.
 			 */
