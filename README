@@ -1,0 +1,43 @@
+Supported platform:
+	Linux
+	Windows
+License:
+	core module:
+		LGPLv2.1 or later
+	others:
+		GPLv3 or later
+
+Build dependency：
+	Loki:
+		http://loki-lib.sourceforge.net/
+	Qt >= 4.4:
+		http://www.qtsoftware.com/products
+	Boost C++ Libraries:
+		http://www.boost.org/
+	FFmpeg Libraries >= 0.5:
+		http://www.ffmpeg.org/
+On Debian-based system:
+	# apt-get install libloki-dev libqt4-dev libphonon-dev libboost-dev libavcodec-dev libavformat-dev
+
+Build step:
+	Linux:
+		$ qmake -r
+		$ make
+	Windows:
+		> qmake -r -tp vc
+
+Supported formats:
+	Converting:
+		Depends on FFmpeg, and may extend by plugin.
+		At least, wav, ape, flac, tta ... should be available.
+	Playing:
+		Depends on Phonon's backend.
+		ape may has poor support.
+
+Contact:
+	mail:
+		legnaleurc@gmail.com
+	site:
+		http://legnaleurc.blogspot.com/search/label/Khopper
+	repository:
+		http://github.com/legnaleurc/khopper/tree/master
