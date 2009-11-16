@@ -1,21 +1,22 @@
-include(../../configure.pri)
+include(../../../configure.pri)
 
 # Path setting
 INC_DIRS = .	\
-	$${CORE_PATH}/include
+	$${CORE_PATH}/include	\
+	../l_flac
 SRC_DIRS = .
 
 INCLUDEPATH += $${INC_DIRS} $${SRC_DIRS}
 DEPANDPATH  += $${INC_DIRS}
 
-HEADERS = mp3panel.hpp mp3writer.hpp
-SOURCES = mp3panel.cpp mp3writer.cpp
+HEADERS = oggpanel.hpp oggwriter.hpp
+SOURCES = oggpanel.cpp oggwriter.cpp
 
 MOC_DIR = $${ROOT_PATH}/tmp/moc
 
 # Config
 CONFIG  += plugin debug_and_release
-TARGET   = $$qtLibraryTarget(kpp_mp3)
+TARGET   = $$qtLibraryTarget(kpp_ogg)
 VERSION  = $${KHOPPER_VERSION}
 TEMPLATE = lib
 
@@ -23,20 +24,20 @@ CONFIG( debug, debug|release ) {
 	DESTDIR     = $${ROOT_PATH}/build/debug/plugins
 	OBJECTS_DIR = $${ROOT_PATH}/tmp/obj/debug
 
-	unix:LIBS  += -L$${ROOT_PATH}/build/debug -lk_core -lmp3lame
-	win32:LIBS += -L$${ROOT_PATH}/build/debug -lk_core0 -lmp3lame_D -ltagd
+	unix:LIBS  += -L$${ROOT_PATH}/build/debug -lk_core
+	win32:LIBS += -L$${ROOT_PATH}/build/debug -lk_core0 -lvorbis_D -logg_D
 } else {
 	DESTDIR     = $${ROOT_PATH}/build/release/plugins
 	OBJECTS_DIR = $${ROOT_PATH}/tmp/obj/release
 	DEFINES    += QT_NO_DEBUG_OUTPUT
 
-	unix:LIBS  += -L$${ROOT_PATH}/build/release -lk_core -lmp3lame
-	win32:LIBS += -L$${ROOT_PATH}/build/release -lk_core0 -lmp3lame -ltag
+	unix:LIBS  += -L$${ROOT_PATH}/build/release -lk_core
+	win32:LIBS += -L$${ROOT_PATH}/build/release -lk_core0 -lvorbis -logg
 
 	unix:QMAKE_POST_LINK = strip $${DESTDIR}/lib$${TARGET}.so
 }
 
 unix {
 	CONFIG    += link_pkgconfig
-	PKGCONFIG += taglib
+	PKGCONFIG += vorbis
 }
