@@ -44,7 +44,7 @@ namespace khopper {
 }
 
 namespace {
-	FILE * fileHelper( const std::wstring & filePath ) {
+	static inline FILE * fileHelper( const std::wstring & filePath ) {
 #ifdef Q_OS_WIN32
 		FILE * fin = NULL;
 		errno_t ret = _wfopen_s( &fin, filePath.c_str(), L"rb" );
@@ -132,7 +132,7 @@ namespace khopper {
 		ByteArray FlacReader::readFrame( double & decoded, bool & stop ) {
 			stop = false;
 			FLAC__bool ok = FLAC__stream_decoder_process_single( this->pFD_.get() );
-			if( !ok ) {
+			if( !ok || FLAC__stream_decoder_get_state( this->pFD_.get() ) == FLAC__STREAM_DECODER_END_OF_STREAM ) {
 				stop = true;
 				return ByteArray();
 			} else {
@@ -172,19 +172,27 @@ namespace khopper {
 			FlacReader * self = static_cast< FlacReader * >( client_data );
 			switch( metadata->type ) {
 			case FLAC__METADATA_TYPE_STREAMINFO:
+				qDebug( "FLAC__METADATA_TYPE_STREAMINFO" );
 				self->setSampleRate( metadata->data.stream_info.sample_rate );
 				self->setChannels( metadata->data.stream_info.channels );
-				self->setDuration( metadata->data.stream_info.total_samples / metadata->data.stream_info.sample_rate );
+				self->setDuration( static_cast< double >( metadata->data.stream_info.total_samples ) / metadata->data.stream_info.sample_rate );
 				self->setBitRate( 0 );
 				break;
 			case FLAC__METADATA_TYPE_PADDING:
 				qDebug( "FLAC__METADATA_TYPE_PADDING" );
+				qDebug() << metadata->length;
 				break;
 			case FLAC__METADATA_TYPE_APPLICATION:
 				qDebug( "FLAC__METADATA_TYPE_APPLICATION" );
 				break;
 			case FLAC__METADATA_TYPE_SEEKTABLE:
 				qDebug( "FLAC__METADATA_TYPE_SEEKTABLE" );
+//#ifndef QT_NO_DEBUG_OUTPUT
+//				for( uint64_t i = 0; i < metadata->data.seek_table.num_points; ++i ) {
+//					FLAC__StreamMetadata_SeekPoint * sp = metadata->data.seek_table.points + i;
+//					qDebug() << sp->sample_number << sp->stream_offset << sp->frame_samples;
+//				}
+//#endif
 				break;
 			case FLAC__METADATA_TYPE_VORBIS_COMMENT:
 				self->parseVorbisComments_( metadata->data.vorbis_comment );
