@@ -1,3 +1,13 @@
+khopper (0.2.3-1ubuntu1) karmic; urgency=low
+
+  [ Wei-Cheng Pan ]
+  * Imported Upstream version 0.2.3
+  * Update for upstream
+  * Bump standard version to 3.8.3
+  * Add replacment setting
+
+ -- Wei-Cheng Pan <legnaleurc@gmail.com>  Mon, 16 Nov 2009 10:35:58 +0000
+
 khopper (0.2.2-1ubuntu1) karmic; urgency=low
 
   [ Wei-Cheng Pan ]
